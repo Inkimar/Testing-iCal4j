@@ -22,22 +22,21 @@ import net.fortuna.ical4j.model.Property;
  */
 public class App {
 
-    private final String calendarName = Filehandler.inFileName;//"/home/ingimar/Desktop/Seminariet-kurser-kalender.ics";
-
     public static void main(String[] args) {
         System.out.println("Testing ical4j");
 
         App app = new App();
-        Calendar calendar = app.readCalendar();
+        Filehandler handler = new Filehandler();
+        
+        Calendar calendar = handler.readCalendar();
         int eventsInCal = app.getNumberOfEventsInCalendar(calendar);
         System.out.println("Number of Events : " + eventsInCal);
         String calendarName = app.getCalendarName(calendar);
-        System.out.println("Name of Calendar : " + calendarName);
+        System.out.println("\n Name of Calendar : \n" + calendarName);
 
         try {
             Calendar updatedCal = app.iterateOverCal(calendar); // test to updata a field
             app.iterateOverCal(updatedCal);
-            Filehandler handler = new Filehandler();
             handler.writeToFile(calendar);
 
         } catch (Exception ex) {
@@ -48,34 +47,8 @@ public class App {
 
     }
 
-    private Calendar readCalendar() {
-
-        FileInputStream fin = null;
-        try {
-            fin = new FileInputStream(calendarName);
-            System.out.println("Found Calendar");
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        CalendarBuilder builder = new CalendarBuilder();
-        Calendar calendar = null;
-        try {
-            calendar = builder.build(fin);
-        } catch (Exception ex) {
-            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                fin.close();
-            } catch (IOException ex) {
-                Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return calendar;
-    }
-
     private String getCalendarName(Calendar calendar) {
-        Property property = calendar.getProperty("X-WR-CALNAME");
+        Property property = calendar.getProperty("X-WR-CALNAME"); // use enum?
         String nameOfCalender = property.getValue();
 
         return nameOfCalender;
