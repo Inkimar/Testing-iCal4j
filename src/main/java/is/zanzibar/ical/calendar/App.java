@@ -23,7 +23,7 @@ import net.fortuna.ical4j.model.Property;
 public class App {
 
     public static void main(String[] args) {
-        System.out.println("Testing ical4j");
+        System.out.println("Testing ical4j: Use if you would like to 'batch'-update the description");
 
         App app = new App();
         Filehandler handler = new Filehandler();
